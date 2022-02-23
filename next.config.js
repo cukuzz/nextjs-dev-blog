@@ -10,3 +10,10 @@ const nextConfig = {
 //     return config;
 //   },
 // };
+
+const debug = process.env.NODE_ENV !== 'production';
+const name = 'nextjs-dev-blog';
+
+module.exports = {
+  assetPrefix: !debug ? `/${name}/` : '',
+};

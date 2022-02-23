@@ -36,9 +36,13 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
+interface iSubMenu {
+  name: string;
+}
+
 interface iProps extends BaseComponentProps {
   menuName: string;
-  subMenu: [{}];
+  subMenu: iSubMenu[];
 }
 export default function AccordionMenu(props: iProps) {
   const { menuName, subMenu } = props;
@@ -56,12 +60,11 @@ export default function AccordionMenu(props: iProps) {
       </AccordionSummary>
       <AccordionDetails>
         <Grid container direction="column">
-          <ListItem button key={1}>
-            {subMenu.name}
-          </ListItem>
-          <ListItem button key={2}>
-            <Typography>Sub Item 2</Typography>
-          </ListItem>
+          {subMenu.map((sub, index) => (
+            <ListItem button key={index}>
+              {sub.name}
+            </ListItem>
+          ))}
         </Grid>
       </AccordionDetails>
     </Accordion>
