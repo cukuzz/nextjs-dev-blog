@@ -1,60 +1,103 @@
-import * as React from 'react';
-import Drawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Toolbar from '@mui/material/Toolbar';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
-import { BaseComponentProps } from '@/types';
-import AccordionMenu from '@components/accordion-menu';
+import {
+  HamburgerIcon,
+  ProfileIcon,
+  SettingsIcon,
+  SignoutIcon,
+  DashboardIcon,
+  TablesIcon,
+  FormsIcon,
+  TabbedContentIcon,
+  CalendarIcon,
+  SupportIcon,
+} from '@components/icon';
 
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
-
-interface iProps extends BaseComponentProps {
-  drawerWidth: number;
-  open: boolean;
-  anchor: Anchor;
-  handleSideBarClose: () => void;
+interface iProps {
+  menuToggle: boolean;
+  setMenuToggle: Dispatch<SetStateAction<boolean>>;
+  children: React.ReactNode;
 }
 
-export default function SideBar(props: iProps) {
-  const { anchor, open, drawerWidth, handleSideBarClose } = props;
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+const SideBar = (props: iProps) => {
+  const bgColor: string = 'bg-blue-500';
+  const { menuToggle, setMenuToggle } = props;
 
-  const toggleDrawer = (anchor: Anchor, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    if (event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
-      return;
-    }
-
-    handleSideBarClose();
-    setState({ ...state, [anchor]: open });
-  };
-
-  const tempSubMenu = [{ name: 'sub menu1' }, { name: 'sub menu2' }];
   return (
-    <Drawer
-      anchor={anchor}
-      open={open}
-      onClose={toggleDrawer(anchor, false)}
-      // variant="persistent"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-      }}
-    >
-      <Toolbar />
-      <Box sx={{ overflow: 'auto' }} role="presentation" onClick={toggleDrawer(anchor, false)} onKeyDown={toggleDrawer(anchor, false)}>
-        {'메뉴자리1'}
-        <Divider />
-        {'메뉴자리2'}
-        <Divider />
-        <AccordionMenu menuName="menu1" subMenu={tempSubMenu} />
-      </Box>
-    </Drawer>
+    <main className="flex bg-gray-100">
+      {/* SideBar */}
+      <aside className={` ${menuToggle ? 'hidden md:block' : 'hidden'} w-64 ${bgColor}`}>
+        <div className="p-6">
+          <a href="" className="flex items-center text-white text-3xl font-semibold hover:text-gray-300">
+            <SettingsIcon class="mr-3" />
+            Admin
+          </a>
+        </div>
+        <nav className="block text-white text-base font-semibold pt-3">
+          <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6">
+            <DashboardIcon class="mr-3" />
+            Dashboard
+          </a>
+          <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6">
+            <TablesIcon class="mr-3" />
+            Tables
+          </a>
+          <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6">
+            <FormsIcon class="mr-3" />
+            Forms
+          </a>
+          <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6">
+            <TabbedContentIcon class="mr-3" />
+            Tabbed Content
+          </a>
+          <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6">
+            <CalendarIcon class="mr-3" />
+            Calendar
+          </a>
+          <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6">
+            <SupportIcon class="mr-3" />
+            Support
+          </a>
+        </nav>
+      </aside>
+
+      {/* Mobile Header & Nav */}
+      <div className="w-full flex flex-col h-screen overflow-y-hidden">
+        <header className={`w-full py-5 px-6 ${menuToggle ? 'hidden' : 'block'} md:hidden`}>
+          {/* Dropdown Nav */}
+          <nav className="text-white text-base font-semibold bg-gray-500 ">
+            <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6">
+              <DashboardIcon class="mr-3" />
+              Dashboard
+            </a>
+            <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6">
+              <TablesIcon class="mr-3" />
+              Tables
+            </a>
+            <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 ">
+              <FormsIcon class="mr-3" />
+              Forms
+            </a>
+            <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6">
+              <TabbedContentIcon class="mr-3" />
+              Tabbed Content
+            </a>
+            <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6">
+              <CalendarIcon class="mr-3" />
+              Calendar
+            </a>
+            <a href="" className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6">
+              <SupportIcon class="mr-3" />
+              Support
+            </a>
+          </nav>
+        </header>
+
+        {/* props.children position here */}
+        <slot>{props.children}</slot>
+      </div>
+    </main>
   );
-}
+};
+
+export default SideBar;
